@@ -1,0 +1,24 @@
+// Kamera başlatma
+startButton.addEventListener('click', async () => {
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        cameraView.innerHTML = '<video autoplay playsinline></video>';
+        const video = cameraView.querySelector('video');
+        video.srcObject = stream;
+        videoStream = stream;
+        startButton.disabled = true;
+        stopButton.disabled = false;
+    } catch (error) {
+        cameraView.innerHTML = <p style="color: red;">Xəta: ${error.message}</p>;
+    }
+});
+
+// Kamera dayandırma
+stopButton.addEventListener('click', () => {
+    if (videoStream) {
+        videoStream.getTracks().forEach(track => track.stop());
+        cameraView.innerHTML = '<p>Kamera dayandırıldı.</p>';
+        startButton.disabled = false;
+        stopButton.disabled = true;
+    }
+});
